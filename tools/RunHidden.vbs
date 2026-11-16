@@ -1,1 +1,1 @@
-CreateObject("WScript.Shell").Run "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ""C:\Users\Windows 10\GenevaFD-Site\tools\Sync-GenevaFD.ps1""", 0, False
+CreateObject("WScript.Shell").Run "powershell.exe -NoProfile -ExecutionPolicy Bypass -File """ & CreateObject("Scripting.FileSystemObject").GetParentFolderName(WScript.ScriptFullName) & "\Sync-GenevaFD.ps1""", 0, False

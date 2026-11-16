@@ -1,7 +1,7 @@
 # Geneva FD app sync: mirrors the source folder into the website repo and publishes changes.
 $ErrorActionPreference = 'Stop'
-$Source = 'C:\Users\Windows 10\Documents\Geneva FD App Folder'
-$Repo   = 'C:\Users\Windows 10\GenevaFD-Site'
+$Source = Join-Path $env:USERPROFILE 'Documents\Geneva FD App Folder'
+$Repo   = Split-Path -Parent $PSScriptRoot
 $Docs   = Join-Path $Repo 'docs'
 $Log    = Join-Path $Repo 'sync.log'
 $env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User')
@@ -14,6 +14,8 @@ try {
   if (-not (Test-Path -LiteralPath $Source)) { Write-Log "Source folder missing: $Source"; exit 1 }
   Set-Location -LiteralPath $Repo
   git pull --quiet --rebase 2>&1 | Out-Null
+  $active = (Get-Content -LiteralPath (Join-Path $Repo 'tools\active-computer.txt') -ErrorAction SilentlyContinue | Select-Object -First 1).Trim()
+  if ($active -and $active -ne $env:COMPUTERNAME) { Write-Log "Skipped: syncing is assigned to $active"; exit 0 }
 
   robocopy $Source $Docs /MIR /XF desktop.ini Thumbs.db '~$*' '*.tmp' /XA:H /R:1 /W:1 /NFL /NDL /NJH /NJS /NP | Out-Null
   if ($LASTEXITCODE -ge 8) { Write-Log "robocopy failed with code $LASTEXITCODE"; exit 1 }
