@@ -1,6 +1,6 @@
-# Geneva FD app sync: mirrors the source folder into the website repo and publishes changes.
+﻿# Geneva FD app sync: mirrors the source folder into the website repo and publishes changes.
 $ErrorActionPreference = 'Stop'
-$Source = Join-Path $env:USERPROFILE 'Documents\Geneva FD App Folder'
+$Source = 'G:\My Drive\Geneva FD App Folder'
 $Repo   = Split-Path -Parent $PSScriptRoot
 $Docs   = Join-Path $Repo 'docs'
 $Log    = Join-Path $Repo 'sync.log'
